@@ -75,6 +75,7 @@ include(src/third-party/Qt-Color-Widgets//color_widgets.pri)
 DEFINES += QAPPLICATION_CLASS=QApplication
 
 SOURCES += src/main.cpp \
+    src/tools/circlecount/circlecounttool.cpp \
     src/widgets/capture/buttonhandler.cpp \
     src/widgets/infowindow.cpp \
     src/config/configwindow.cpp \
@@ -148,6 +149,8 @@ SOURCES += src/main.cpp \
     src/widgets/panel/sidepanelwidget.cpp
 
 HEADERS  += src/widgets/capture/buttonhandler.h \
+    src/tools/circlecount/circlecounttool.h \
+    src/tools/circlecount/circlecountwidget.h \
     src/widgets/infowindow.h \
     src/config/configwindow.h \
     src/widgets/capture/capturewidget.h \

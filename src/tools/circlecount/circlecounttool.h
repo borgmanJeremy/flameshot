@@ -17,33 +17,25 @@
 
 #pragma once
 
-#include <QRect>
-#include <QPoint>
-#include <QPixmap>
-#include <QPainter>
+#include "src/tools/abstracttwopointtool.h"
 
-struct CaptureContext {
-    // screenshot with modifications
-    QPixmap screenshot;
-    // unmodified screenshot
-    QPixmap origScreenshot;
-    // Selection area
-    QRect selection;
-    // Widget dimensions
-    QRect widgetDimensions;
-    // Selected tool color
-    QColor color;
-    // Path where the content has to be saved
-    QString savePath;
-    // Ofset of the capture widget based on the system's screen (top-left)
-    QPoint widgetOffset;
-    // Mouse position inside the widget
-    QPoint mousePos;
-    // Value of the desired thickness
-    int thickness;
-    int circleCount;
-    // Mode of the capture widget
-    bool fullscreen;
+class CircleCountTool : public AbstractTwoPointTool {
+    Q_OBJECT
+public:
+    explicit CircleCountTool(QObject *parent = nullptr);
 
-    QPixmap selectedScreenshotArea() const ;
+    QIcon icon(const QColor &background, bool inEditor) const override;
+    QString name() const override;
+    static QString nameID();
+    QString description() const override;
+
+    CaptureTool* copy(QObject *parent = nullptr) override;
+    void process(
+            QPainter &painter, const QPixmap &pixmap, bool recordUndo = false) override;
+    void paintMousePreview(QPainter &painter, const CaptureContext &context) override;
+private:
+    unsigned int m_count;
+public slots:
+    void drawStart(const CaptureContext &context) override;
+    void pressed(const CaptureContext &context) override;
 };
