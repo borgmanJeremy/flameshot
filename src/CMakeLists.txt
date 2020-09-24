@@ -10,6 +10,8 @@ find_package(
   DBus
   LinguistTools)
 
+find_package(Boost REQUIRED COMPONENTS filesystem)
+
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
@@ -28,6 +30,7 @@ add_subdirectory(core)
 add_subdirectory(utils)
 add_subdirectory(widgets)
 add_subdirectory(tools)
+add_subdirectory(plugins)
 
 set(FLAMESHOT_TS_FILES
     ${CMAKE_SOURCE_DIR}/data/translations/Internationalization_ca.ts
@@ -112,11 +115,12 @@ target_link_libraries(
   flameshot
   project_warnings
   project_options
+  ${CMAKE_DL_LIBS}
+  Boost::filesystem
   Qt5::Svg
   Qt5::DBus
   Qt5::Network
   Qt5::Widgets)
-
 target_compile_definitions(flameshot PRIVATE APP_PREFIX="${CMAKE_INSTALL_PREFIX}")
 target_compile_definitions(flameshot PRIVATE APP_VERSION="v${PROJECT_VERSION}")
 target_compile_definitions(flameshot PRIVATE IMGUR_CLIENT_ID="313baf0c7b4d3ff")

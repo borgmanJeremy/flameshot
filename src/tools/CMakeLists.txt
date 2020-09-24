@@ -9,8 +9,10 @@ target_sources(
   PRIVATE imgur/imguruploader.h
           imgur/imguruploadertool.h
           imgur/imguruploader.cpp
-          imgur/imguruploadertool.cpp)
-target_sources(
+          imgur/imguruploadertool.cpp
+          imgur/uploadplugin.h
+          imgur/uploadplugin.cpp)
+        target_sources(
   flameshot
   PRIVATE launcher/applaunchertool.h
           launcher/applauncherwidget.h

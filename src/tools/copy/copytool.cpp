@@ -19,6 +19,8 @@
 #include "src/utils/screenshotsaver.h"
 #include <QPainter>
 
+#include "../imgur/uploadplugin.h"
+
 CopyTool::CopyTool(QObject* parent)
   : AbstractActionTool(parent)
 {}
@@ -55,6 +57,7 @@ CaptureTool* CopyTool::copy(QObject* parent)
 
 void CopyTool::pressed(const CaptureContext& context)
 {
+    test();
     emit requestAction(REQ_CAPTURE_DONE_OK);
     ScreenshotSaver().saveToClipboard(context.selectedScreenshotArea());
 }
