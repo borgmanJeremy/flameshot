@@ -17,29 +17,37 @@
 
 #pragma once
 
-#include <QTabWidget>
+#include <QWidget>
 
-class FileNameEditor;
-class GeneneralConf;
-class QFileSystemWatcher;
-class VisualsEditor;
+class QVBoxLayout;
+class QCheckBox;
+class QPushButton;
+class QLabel;
+class QLineEdit;
 
-class ConfigWindow : public QTabWidget
+class PluginConf : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ConfigWindow(QWidget* parent = nullptr);
+    explicit PluginConf(QWidget* parent = nullptr);
 
-signals:
-    void updateChildren();
+public slots:
+    void updateComponents();
 
-protected:
-    void keyPressEvent(QKeyEvent*);
+private slots:
+    void showHelpChanged(bool checked);
+    void showSidePanelButtonChanged(bool checked);
+    void showDesktopNotificationChanged(bool checked);
+    void showTrayIconChanged(bool checked);
+    void autostartChanged(bool checked);
+    void closeAfterCaptureChanged(bool checked);
+    void saveAfterCopyChanged(bool checked);
+    void changeSavePath();
+    void importConfiguration();
+    void exportFileConfiguration();
+    void resetConfiguration();
 
 private:
-    FileNameEditor* m_filenameEditor;
-    GeneneralConf* m_generalConfig;
-    GeneneralConf* m_pluginConfig;
-    VisualsEditor* m_visuals;
-    QFileSystemWatcher* m_configWatcher;
+    QVBoxLayout* m_layout;
+    QLineEdit* m_savePath;
 };

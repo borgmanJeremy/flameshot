@@ -73,6 +73,11 @@ ConfigWindow::ConfigWindow(QWidget* parent)
     m_generalConfig = new GeneneralConf();
     addTab(m_generalConfig, QIcon(modifier + "config.svg"), tr("General"));
 
+
+    // upload plugin
+    m_pluginConfig = new GeneneralConf();
+    addTab(m_pluginConfig, QIcon(modifier + "config.svg"), tr("Plugin's"));
+
     // connect update sigslots
     connect(this,
             &ConfigWindow::updateChildren,

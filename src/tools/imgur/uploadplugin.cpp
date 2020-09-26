@@ -11,8 +11,7 @@ namespace dll=boost::dll;
 void test()
 {
     boost::dll::fs::path lib_path("/home/jeremy/github/borgman_flameshot/cmake-build-default/src/plugins");
-    boost::shared_ptr<UploadPlugin>
-      plugin; // variable to hold a pointer to plugin variable
+    boost::shared_ptr<UploadPlugin> plugin;
     std::cout << "Loading the plugin" << std::endl;
 
     plugin = dll::import<UploadPlugin>(  // type of imported symbol is located between `<` and `>`
