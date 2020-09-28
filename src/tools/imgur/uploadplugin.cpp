@@ -13,7 +13,7 @@ void test()
     std::cout << "Loading the plugin" << std::endl;
 
     plugin = boost::dll::import<UploadPlugin>(  // type of imported symbol is located between `<` and `>`
-      lib_path / "libadder_plugin",        // path to the library and library name
+      lib_path / "libimgur_plugin",        // path to the library and library name
       "plugin",                          // name of the symbol to import
       boost::dll::load_mode::append_decorations // makes `libmy_plugin_sum.so` or `my_plugin_sum.dll` from `my_plugin_sum`
     );

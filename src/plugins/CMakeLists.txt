@@ -1,5 +1,5 @@
 
-add_library(adder_plugin SHARED)
-target_sources(adder_plugin
+add_library(imgur_plugin SHARED)
+target_sources(imgur_plugin
         PRIVATE
-        my_plugin_sum.cpp)
+        imgur_plugin.cpp)
