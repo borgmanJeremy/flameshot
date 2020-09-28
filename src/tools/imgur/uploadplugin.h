@@ -13,8 +13,8 @@ void test();
 class BOOST_SYMBOL_VISIBLE UploadPlugin
 {
 public:
-    virtual std::string name() const=0;
-    virtual float calculate(float x, float y) =0;
+    // Plugin should COPY data out of this buffer. It is not ref counted
+    virtual std::string name(char* buffer, unsigned int size);
 
     virtual ~UploadPlugin() {}
 };
