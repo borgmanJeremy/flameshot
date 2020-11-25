@@ -1,5 +1,4 @@
 ---
-
 name: flameshot
 adopt-info: flameshot
 base: core18
@@ -15,6 +14,12 @@ confinement: strict  # use 'strict' once you have the right plugs and slots
 #confinement: devmode  # use 'strict' once you have the right plugs and slots
 architectures:
   - build-on: amd64
+
+plugs:
+  dot-config-flameshot:
+    interface: personal-files
+    write:
+      - $HOME/.config/flameshot
 
 apps:
   flameshot:
@@ -38,6 +43,7 @@ apps:
       - wayland
       - unity7
       - x11
+      - dot-config-flameshot
 
 parts:
   flameshot:
@@ -47,10 +53,11 @@ parts:
       - cmake #core18 does not have new enough cmake so install from snap
     plugin: cmake
     configflags:
-      - '-DCMAKE_BUILD_TYPE=RelWithDebInfo'
+      - '-DCMAKE_BUILD_TYPE=Debug'
       - '-DCMAKE_INSTALL_PREFIX=/usr'
-    source: https://github.com/flameshot-org/flameshot.git
-    source-type: git
+        #source: https://github.com/flameshot-org/flameshot.git
+    source: .
+    source-type: local
     override-pull: |
       snapcraftctl pull
       last_committed_tag="$(git tag -l --sort=-v:refname | head -1)"

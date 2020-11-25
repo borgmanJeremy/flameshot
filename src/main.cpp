@@ -440,7 +440,8 @@ int main(int argc, char* argv[])
               << QStringLiteral("The new pattern is '%1'\n"
                                 "Parsed pattern example: %2\n")
                    .arg(newFilename)
-                   .arg(fh.parsedPattern());
+                   .arg(
+                     fh.parseFilename(ConfigHandler().filenamePatternValue()));
         }
         if (tray) {
             QDBusMessage m = QDBusMessage::createMethodCall(

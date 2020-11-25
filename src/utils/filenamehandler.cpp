@@ -22,46 +22,55 @@
 #include <ctime>
 #include <locale>
 
+#include <QDebug>
+
 FileNameHandler::FileNameHandler(QObject* parent)
   : QObject(parent)
 {
     std::locale::global(std::locale(""));
 }
 
-QString FileNameHandler::parsedPattern()
+QString cleanDateSpecifier(const QString& input_date_string)
 {
-    return parseFilename(ConfigHandler().filenamePatternValue());
+    QString clean_date_string = input_date_string.isEmpty()
+                                  ? FileNameHandler::DEFAULT_FORMAT
+                                  : input_date_string;
+
+    // remove trailing characters '%' in the pattern
+    while (clean_date_string.endsWith('%')) {
+        clean_date_string.chop(1);
+    }
+    return clean_date_string;
 }
 
-QString FileNameHandler::parseFilename(const QString& name)
+QString getDateString(const QString& date_string)
 {
-    QString res = name;
-    // remove trailing characters '%' in the pattern
-    if (name.isEmpty()) {
-        res = QLatin1String("%F_%H-%M");
-    }
-    while (res.endsWith('%')) {
-        res.chop(1);
-    }
-    std::time_t t = std::time(NULL);
+    std::time_t t = std::time(nullptr);
+    char date_data[FileNameHandler::MAX_CHARACTERS] = { 0 };
+    std::strftime(date_data,
+                  FileNameHandler::MAX_CHARACTERS,
+                  date_string.toStdString().data(),
+                  std::localtime(&t));
 
-    char* tempData = QStringTocharArr(res);
-    char data[MAX_CHARACTERS] = { 0 };
-    std::strftime(data, sizeof(data), tempData, std::localtime(&t));
-    res = QString::fromLocal8Bit(data, (int)strlen(data));
-    free(tempData);
+    return QString::fromLocal8Bit(date_data, (int)strlen(date_data));
+}
+
+QString FileNameHandler::parseFilename(const QString& input_specifier)
+{
+    QString clean_specifier = cleanDateSpecifier(input_specifier);
+    QString date_string = getDateString(clean_specifier);
 
     // add the parsed pattern in a correct format for the filesystem
-    res = res.replace(QLatin1String("/"), QStringLiteral("⁄"))
-            .replace(QLatin1String(":"), QLatin1String("-"));
-    return res;
+    date_string = date_string.replace(QLatin1String(":"), QLatin1String("-"));
+    return date_string;
 }
 
 QString FileNameHandler::generateAbsolutePath(const QString& path)
 {
     QString directory = path;
-    QString filename = parsedPattern();
+    QString filename = parseFilename(ConfigHandler().filenamePatternValue());
     fixPath(directory, filename);
+    qDebug() << "absolute path: " << directory + filename;
     return directory + filename;
 }
 // path a images si no existe, add numeration
@@ -70,35 +79,24 @@ void FileNameHandler::setPattern(const QString& pattern)
     ConfigHandler().setFilenamePattern(pattern);
 }
 
-QString FileNameHandler::absoluteSavePath(QString& directory, QString& filename)
+QString FileNameHandler::absoluteSavePath()
 {
+    QString directory;
+    QString filename;
+
     ConfigHandler config;
     directory = config.savePath();
     if (directory.isEmpty() || !QDir(directory).exists() ||
         !QFileInfo(directory).isWritable()) {
         directory =
           QStandardPaths::writableLocation(QStandardPaths::PicturesLocation);
+        qDebug() << "not writable";
     }
-    filename = parsedPattern();
+    filename = parseFilename(ConfigHandler().filenamePatternValue());
     fixPath(directory, filename);
+
+    qDebug() << "absolute path: " << directory + filename;
     return directory + filename;
-}
-
-QString FileNameHandler::absoluteSavePath()
-{
-    QString dir, file;
-    return absoluteSavePath(dir, file);
-}
-
-QString FileNameHandler::charArrToQString(const char* c)
-{
-    return QString::fromLocal8Bit(c, MAX_CHARACTERS);
-}
-
-char* FileNameHandler::QStringTocharArr(const QString& s)
-{
-    QByteArray ba = s.toLocal8Bit();
-    return const_cast<char*>(strdup(ba.constData()));
 }
 
 void FileNameHandler::fixPath(QString& directory, QString& filename)

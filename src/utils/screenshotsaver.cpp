@@ -21,10 +21,10 @@
 #include "src/utils/systemnotification.h"
 #include <QApplication>
 #include <QClipboard>
+#include <QDebug>
 #include <QFileDialog>
 #include <QImageWriter>
 #include <QMessageBox>
-
 ScreenshotSaver::ScreenshotSaver() {}
 
 // TODO: If data is saved to the clipboard before the notification is sent via
@@ -55,6 +55,7 @@ bool ScreenshotSaver::saveToFilesystem(const QPixmap& capture,
 {
     QString completePath = FileNameHandler().generateAbsolutePath(path);
     completePath += QLatin1String(".png");
+    qDebug() << "Complete Path: " << completePath;
     bool ok = capture.save(completePath);
     QString saveMessage;
     QString notificationPath = completePath;
@@ -99,7 +100,7 @@ bool ScreenshotSaver::saveToFilesystemGUI(const QPixmap& capture)
         }
 
         ok = capture.save(savePath);
-
+        qDebug() << "saved to: " << savePath;
         if (ok) {
             QString pathNoFile =
               savePath.left(savePath.lastIndexOf(QLatin1String("/")));

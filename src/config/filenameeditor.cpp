@@ -127,5 +127,6 @@ void FileNameEditor::addToNameEditor(QString s)
 void FileNameEditor::updateComponents()
 {
     m_nameEditor->setText(ConfigHandler().filenamePatternValue());
-    m_outputLabel->setText(m_nameHandler->parsedPattern());
+    m_outputLabel->setText(
+      m_nameHandler->parseFilename(ConfigHandler().filenamePatternValue()));
 }

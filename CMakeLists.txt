@@ -50,6 +50,7 @@ set(QAPPLICATION_CLASS
     CACHE STRING "Inheritance class for SingleApplication")
 add_subdirectory(external/singleapplication)
 add_subdirectory(src)
+add_subdirectory(test)
 
 # CPack
 set(CPACK_PACKAGE_VENDOR "flameshot-org")

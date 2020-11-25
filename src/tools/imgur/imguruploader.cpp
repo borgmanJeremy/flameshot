@@ -124,7 +124,8 @@ void ImgurUploader::upload()
     QUrlQuery urlQuery;
     urlQuery.addQueryItem(QStringLiteral("title"),
                           QStringLiteral("flameshot_screenshot"));
-    QString description = FileNameHandler().parsedPattern();
+    QString description =
+      FileNameHandler().parseFilename(ConfigHandler().filenamePatternValue());
     urlQuery.addQueryItem(QStringLiteral("description"), description);
 
     QUrl url(QStringLiteral("https://api.imgur.com/3/image"));
