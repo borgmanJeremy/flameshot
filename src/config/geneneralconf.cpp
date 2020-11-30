@@ -330,7 +330,8 @@ const QString GeneneralConf::chooseFolder(const QString pathDefault)
       this,
       tr("Choose a Folder"),
       path,
-      QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+      QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks |
+        QFileDialog::DontUseNativeDialog);
     if (path.isEmpty()) {
         return path;
     }

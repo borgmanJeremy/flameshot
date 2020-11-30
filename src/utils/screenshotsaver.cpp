@@ -53,7 +53,7 @@ bool ScreenshotSaver::saveToFilesystem(const QPixmap& capture,
                                        const QString& path,
                                        const QString& messagePrefix)
 {
-    QString completePath = FileNameHandler().generateAbsolutePath(path);
+    QString completePath = FileNameHandler().generateAbsolutePath(path, ConfigHandler().filenamePatternValue());
     completePath += QLatin1String(".png");
     qDebug() << "Complete Path: " << completePath;
     bool ok = capture.save(completePath);
@@ -79,14 +79,18 @@ bool ScreenshotSaver::saveToFilesystemGUI(const QPixmap& capture)
     bool ok = false;
     while (!ok) {
         ConfigHandler config;
-        QString savePath = FileNameHandler().absoluteSavePath();
+        QString savePath = FileNameHandler().absoluteSavePath(config.savePath(), ConfigHandler().filenamePatternValue());
+
         if (!config.savePathFixed()) {
             savePath = QFileDialog::getSaveFileName(
               nullptr,
               QObject::tr("Save screenshot"),
-              FileNameHandler().absoluteSavePath(),
+              FileNameHandler().absoluteSavePath(config.savePath(), ConfigHandler().filenamePatternValue()),
               QLatin1String("Portable Network Graphic file (PNG) (*.png);;BMP "
-                            "file (*.bmp);;JPEG file (*.jpg)"));
+                            "file (*.bmp);;JPEG file (*.jpg)"),
+              nullptr,
+              QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks |
+                QFileDialog::DontUseNativeDialog);
         }
 
         if (savePath.isNull()) {

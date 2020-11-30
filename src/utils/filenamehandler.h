@@ -19,6 +19,9 @@
 
 #include <QObject>
 
+QString cleanDateSpecifier(const QString& input_date_string);
+QString getDateString(const QString& date_string);
+
 class FileNameHandler : public QObject
 {
     Q_OBJECT
@@ -26,15 +29,12 @@ public:
     explicit FileNameHandler(QObject* parent = nullptr);
 
     QString parseFilename(const QString& name);
-    QString generateAbsolutePath(const QString& path);
-    QString absoluteSavePath();
+    QString generateAbsolutePath(const QString& path, const QString& filePattern);
+    QString absoluteSavePath(QString directory, const QString& filename);
 
-    static const int MAX_CHARACTERS = 70;
+    static constexpr int MAX_CHARACTERS = 70;
     static constexpr char DEFAULT_FORMAT[] = "%F_%H-%M";
 
-public slots:
-    void setPattern(const QString& pattern);
-
 private:
-    void fixPath(QString& directory, QString& filename);
+    QString fixPath(QString directory, QString filename);
 };

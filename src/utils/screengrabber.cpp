@@ -18,6 +18,7 @@
 #include "screengrabber.h"
 #include "src/utils/filenamehandler.h"
 #include "src/utils/systemnotification.h"
+#include "src/utils/confighandler.h"
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QGuiApplication>
@@ -45,7 +46,7 @@ QPixmap ScreenGrabber::grabEntireDesktop(bool& ok)
             case DesktopInfo::GNOME: {
                 // https://github.com/GNOME/gnome-shell/blob/695bfb96160033be55cfb5ac41c121998f98c328/data/org.gnome.Shell.Screenshot.xml
                 QString path =
-                  FileNameHandler().generateAbsolutePath(QDir::tempPath()) +
+                  FileNameHandler().generateAbsolutePath(QDir::tempPath(), ConfigHandler().filenamePatternValue()) +
                   ".png";
                 QDBusInterface gnomeInterface(
                   QStringLiteral("org.gnome.Shell"),

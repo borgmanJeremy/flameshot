@@ -1,11 +1,35 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.13)
 
-project(baz LANGUAGES CXX VERSION 0.0.1)
+project(flameshot_tests LANGUAGES CXX)
 
 find_package(Catch2 REQUIRED)
-add_executable(foo test.cpp)
-target_link_libraries(foo Catch2::Catch2)
+find_package(
+        Qt5
+        CONFIG
+        REQUIRED
+        Core
+        Gui
+        Widgets)
+
+
+
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
+
+add_executable(test_filenamehandler)
+target_sources(test_filenamehandler PRIVATE
+        ../src/utils/filenamehandler.cpp
+        test_filenamehandler.cpp)
+
+target_include_directories(
+        test_filenamehandler
+        PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../>
+)
+
+target_link_libraries(test_filenamehandler Qt5::Widgets Catch2::Catch2)
 
 include(CTest)
 include(Catch)
-catch_discover_tests(foo)
+catch_discover_tests(test_filenamehandler)

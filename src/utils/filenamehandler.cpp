@@ -16,13 +16,13 @@
 //     along with Flameshot.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "filenamehandler.h"
-#include "src/utils/confighandler.h"
 #include <QDir>
 #include <QStandardPaths>
 #include <ctime>
 #include <locale>
 
 #include <QDebug>
+constexpr char FileNameHandler::DEFAULT_FORMAT[];
 
 FileNameHandler::FileNameHandler(QObject* parent)
   : QObject(parent)
@@ -65,41 +65,31 @@ QString FileNameHandler::parseFilename(const QString& input_specifier)
     return date_string;
 }
 
-QString FileNameHandler::generateAbsolutePath(const QString& path)
+QString FileNameHandler::generateAbsolutePath(const QString& path, const QString& filePattern)
 {
     QString directory = path;
-    QString filename = parseFilename(ConfigHandler().filenamePatternValue());
+    QString filename = parseFilename(filePattern);
     fixPath(directory, filename);
     qDebug() << "absolute path: " << directory + filename;
     return directory + filename;
 }
-// path a images si no existe, add numeration
-void FileNameHandler::setPattern(const QString& pattern)
-{
-    ConfigHandler().setFilenamePattern(pattern);
-}
 
-QString FileNameHandler::absoluteSavePath()
+QString FileNameHandler::absoluteSavePath(QString directory, const QString& filename)
 {
-    QString directory;
-    QString filename;
-
-    ConfigHandler config;
-    directory = config.savePath();
+    qDebug() << "directory: " << directory;
     if (directory.isEmpty() || !QDir(directory).exists() ||
         !QFileInfo(directory).isWritable()) {
         directory =
           QStandardPaths::writableLocation(QStandardPaths::PicturesLocation);
         qDebug() << "not writable";
     }
-    filename = parseFilename(ConfigHandler().filenamePatternValue());
-    fixPath(directory, filename);
+    //filename = parseFilename(ConfigHandler().filenamePatternValue());
+    auto final_path = fixPath(directory, filename);
 
-    qDebug() << "absolute path: " << directory + filename;
-    return directory + filename;
+    return final_path;
 }
 
-void FileNameHandler::fixPath(QString& directory, QString& filename)
+QString FileNameHandler::fixPath(QString directory, QString filename)
 {
     // add '/' at the end of the directory
     if (!directory.endsWith(QLatin1String("/"))) {
@@ -107,6 +97,8 @@ void FileNameHandler::fixPath(QString& directory, QString& filename)
     }
     // add numeration in case of repeated filename in the directory
     // find unused name adding _n where n is a number
+
+    //TODO need to support all file extensions
     QFileInfo checkFile(directory + filename + ".png");
     if (checkFile.exists()) {
         filename += QLatin1String("_");
@@ -121,4 +113,5 @@ void FileNameHandler::fixPath(QString& directory, QString& filename)
             ++i;
         }
     }
+    return directory + filename;
 }
