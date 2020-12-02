@@ -19,6 +19,18 @@
 
 #include <QObject>
 
+enum class FileExtension{
+    PNG,
+    JPG,
+    BMP
+};
+
+struct FileType{
+    FileExtension ext;
+    std::string ext_str;
+    std::string description;
+};
+
 QString cleanDateSpecifier(const QString& input_date_string);
 QString getDateString(const QString& date_string);
 
@@ -29,12 +41,15 @@ public:
     explicit FileNameHandler(QObject* parent = nullptr);
 
     QString parseFilename(const QString& name);
-    QString generateAbsolutePath(const QString& path, const QString& filePattern);
+    QString generateAbsolutePath(const QString& path,
+                                 const QString& filePattern);
     QString absoluteSavePath(QString directory, const QString& filename);
 
     static constexpr int MAX_CHARACTERS = 70;
     static constexpr char DEFAULT_FORMAT[] = "%F_%H-%M";
 
-private:
     QString fixPath(QString directory, QString filename);
+
+private:
+    std::vector<FileType> _supportedFiles;
 };

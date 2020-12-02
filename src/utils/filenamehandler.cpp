@@ -28,6 +28,14 @@ FileNameHandler::FileNameHandler(QObject* parent)
   : QObject(parent)
 {
     std::locale::global(std::locale(""));
+    _supportedFiles.push_back(
+      { FileExtension::PNG, ".png", "Portable Network Graphic file (PNG)" });
+
+    _supportedFiles.push_back(
+      { FileExtension::BMP, ".bmp", "Bitmap file" });
+
+    _supportedFiles.push_back(
+      { FileExtension::JPG, ".jpg", "JPEG file" });
 }
 
 QString cleanDateSpecifier(const QString& input_date_string)
@@ -65,28 +73,23 @@ QString FileNameHandler::parseFilename(const QString& input_specifier)
     return date_string;
 }
 
-QString FileNameHandler::generateAbsolutePath(const QString& path, const QString& filePattern)
+QString FileNameHandler::generateAbsolutePath(const QString& path,
+                                              const QString& filePattern)
 {
     QString directory = path;
     QString filename = parseFilename(filePattern);
-    fixPath(directory, filename);
-    qDebug() << "absolute path: " << directory + filename;
-    return directory + filename;
+    return fixPath(directory, filename);
 }
 
-QString FileNameHandler::absoluteSavePath(QString directory, const QString& filename)
+QString FileNameHandler::absoluteSavePath(QString directory,
+                                          const QString& filename)
 {
-    qDebug() << "directory: " << directory;
     if (directory.isEmpty() || !QDir(directory).exists() ||
         !QFileInfo(directory).isWritable()) {
         directory =
           QStandardPaths::writableLocation(QStandardPaths::PicturesLocation);
-        qDebug() << "not writable";
     }
-    //filename = parseFilename(ConfigHandler().filenamePatternValue());
-    auto final_path = fixPath(directory, filename);
-
-    return final_path;
+    return fixPath(directory, filename);
 }
 
 QString FileNameHandler::fixPath(QString directory, QString filename)
@@ -98,7 +101,7 @@ QString FileNameHandler::fixPath(QString directory, QString filename)
     // add numeration in case of repeated filename in the directory
     // find unused name adding _n where n is a number
 
-    //TODO need to support all file extensions
+    // TODO need to support all file extensions
     QFileInfo checkFile(directory + filename + ".png");
     if (checkFile.exists()) {
         filename += QLatin1String("_");
