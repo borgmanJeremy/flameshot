@@ -56,12 +56,6 @@ Flameshot::Flameshot()
                      &QHotkey::activated,
                      qApp,
                      [this]() { gui(); });
-    m_HotkeyScreenshotHistory = new QHotkey(
-      QKeySequence(ConfigHandler().shortcut("SCREENSHOT_HISTORY")), true, this);
-    QObject::connect(m_HotkeyScreenshotHistory,
-                     &QHotkey::activated,
-                     qApp,
-                     [this]() { history(); });
 #endif
 }
 
@@ -234,7 +228,6 @@ void Flameshot::info()
     }
 }
 
-
 QVersionNumber Flameshot::getVersion()
 {
     return QVersionNumber::fromString(
@@ -359,7 +352,6 @@ void Flameshot::exportCapture(const QPixmap& capture,
               << QObject::tr("Full screen screenshot pinned to screen");
         }
     }
-
 }
 
 void Flameshot::setExternalWidget(bool b)
