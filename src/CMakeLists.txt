@@ -5,7 +5,6 @@ find_package(
         Core
         Gui
         Widgets
-        Network
         Svg
         DBus
         LinguistTools)
@@ -207,7 +206,6 @@ target_link_libraries(
         project_options
         Qt5::Svg
         Qt5::DBus
-        Qt5::Network
         Qt5::Widgets
         ${QTSINGLEAPPLICATION_LIBRARY}
         QtColorWidgets
