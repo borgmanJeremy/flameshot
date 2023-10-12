@@ -119,7 +119,9 @@ jobs:
           cmake -S . -B build -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX="${APPIMAGE_DST_PATH}/usr" -DUSE_LAUNCHER_ABSOLUTE_PATH:BOOL=OFF
           cmake --build build --target install --config RelWithDebInfo -- -j$(nproc)
 
-
+          ls ${APPIMAGE_DST_PATH}
+          cd ${APPIMAGE_DST_PATH}
+          pwd
           $GITHUB_WORKSPACE/appimagetool -s deploy "${APPIMAGE_DST_PATH}/usr/share/applications/org.flameshot.Flameshot.desktop" "${APPIMAGE_DST_PATH}"
 
           mkdir -p "${APPIMAGE_DST_PATH}/usr/plugins/platforminputcontexts"
