@@ -136,9 +136,10 @@ jobs:
 
           chmod +x ${APPIMAGE_DST_PATH}/usr/lib64/ld-*.so.*
 
-          ls ${GITHUB_WORKSPACE}
 
           VERSION=${VERSION} $GITHUB_WORKSPACE/appimagetool "${APPIMAGE_DST_PATH}"
+
+          ls ${GITHUB_WORKSPACE}
           mv $GITHUB_WORKSPACE/Flameshot-${VERSION}-x86_64.AppImage $GITHUB_WORKSPACE/Flameshot-${VERSION}.x86_64.AppImage
 
 
