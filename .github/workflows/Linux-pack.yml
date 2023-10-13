@@ -138,8 +138,10 @@ jobs:
 
 
           VERSION=${VERSION} $GITHUB_WORKSPACE/appimagetool "${APPIMAGE_DST_PATH}"
-
+          echo ${VERSION}
           ls ${GITHUB_WORKSPACE}
+          file git_revno=$(git rev-list $(git describe --tags --abbrev=0)..HEAD --count)
+
           mv $GITHUB_WORKSPACE/Flameshot-${VERSION}-x86_64.AppImage $GITHUB_WORKSPACE/Flameshot-${VERSION}.x86_64.AppImage
 
 
