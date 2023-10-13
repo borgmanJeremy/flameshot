@@ -136,8 +136,12 @@ jobs:
 
           chmod +x ${APPIMAGE_DST_PATH}/usr/lib64/ld-*.so.*
 
+          ls ${GITHUB_WORKSPACE}
+
           VERSION=${VERSION} $GITHUB_WORKSPACE/appimagetool "${APPIMAGE_DST_PATH}"
           mv $GITHUB_WORKSPACE/Flameshot-${VERSION}-x86_64.AppImage $GITHUB_WORKSPACE/Flameshot-${VERSION}.x86_64.AppImage
+
+
       - name: SHA256Sum of appimage package(daily build)
         run: |
           cd "$GITHUB_WORKSPACE/" || { >&2 echo "Cannot cd to '$GITHUB_WORKSPACE/'!"; exit 11 ; }
