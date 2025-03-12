@@ -162,9 +162,16 @@ QPixmap ScreenGrabber::grabEntireDesktop(bool& ok)
         if (!ok) {
             AbstractLogger::error() << tr("Unable to capture screen");
         }
+        if (res.isNull()) {
+            auto screenNumber = QApplication::desktop()->screenNumber();
+            QScreen* screen = QApplication::screens()[screenNumber];
+            res.setDevicePixelRatio(screen->devicePixelRatio());
+        }
+
         return res;
     }
 #endif
+
 #if defined(Q_OS_LINUX) || defined(Q_OS_UNIX) || defined(Q_OS_WIN)
     QRect geometry = desktopGeometry();
     QPixmap p(QApplication::primaryScreen()->grabWindow(
